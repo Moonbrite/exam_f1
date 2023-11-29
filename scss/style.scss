@@ -1,0 +1,140 @@
+*{
+  font-family: 'Racing Sans One', sans-serif;
+  margin: 0;
+
+}
+
+h1{
+  padding-top: 150px;
+}
+
+h3 {
+  padding-top: 25vh;
+}
+h4 {
+  padding: 15px 0;
+}
+ul {
+  list-style: none;
+}
+
+body {
+  background: rgba(215, 215, 215, 0.8);
+}
+
+header {
+  .nav-bleu{
+    background: #15151e;
+  }
+  nav {
+    z-index: 999;
+    background: #e10600;
+    .btn-ajouter{
+      background: #1f1f27;
+      line-height: 15px;
+      letter-spacing: .5px;
+      font-size: 12px;
+      padding: 5px;
+      margin: 5px;
+      border-radius: 4px;
+      max-height: 30px;
+    }
+    a {
+      color:white !important;
+      text-decoration: none;
+    }
+    .no-border{
+      border: none !important;
+      background: transparent !important;
+    }
+    img{
+      border-radius: 10%;
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+      padding: 2px;
+      background: black;
+      margin: 4px 0;
+    }
+  }
+}
+
+
+section.login-container{
+  display: flex;
+}
+
+
+section.login-container > div{
+  width: 450px;
+  padding: 20px;
+  text-align: center;
+  background: #eee;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin: 150px auto;
+}
+
+section.login-container form{
+  display: flex;
+  flex-direction: column;
+}
+
+
+form input[type="password"],
+form input[type="text"],
+form button[type="submit"],
+form input[type="email"],
+form input[type="date"],
+{
+  width: 100%;
+  margin-bottom: 20px;
+  padding: 16px;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: 0;
+}
+
+form input[type="text"]:focus,
+form input[type="date"]:focus,
+form input[type="text"]:hover,
+form input[type="email"]:hover,
+form input[type="password"]:focus,
+form input[type="date"]:hover,
+form input[type="password"]:hover {
+  background-color: #ccc;
+}
+
+form button[type="submit"] {
+  font-weight: bold;
+  color: #eee;
+  text-transform: uppercase;
+  background: #e10600;
+}
+
+form button[type="submit"]:focus,
+form button[type="submit"]:hover {
+  background-color: #8d0400;
+}
+
+.img-previsu {
+  max-width: 150px;
+}
+
+.card img {
+  height: 230px;
+  object-fit: cover;
+}
+.Attaquant{
+  color: red;
+}
+.Défenseur{
+  color: #00a5ff;
+}
+.Gardien{
+  color: #e1d000;
+}
+.Milieu {
+  color: darkgreen;
+}

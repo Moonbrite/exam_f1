@@ -5,7 +5,7 @@ include "blocks/redirection.php";
 redirectionConnectionIsConected();
 $pdo = dbconnect();
 $errors = [];
-$types = ["Gardien","Attaquant","Milieu","Défenseur"];
+$types = ["Alfa Roméo","AlphaTauri","Alpine","Aston Martin","Ferrari","Haas","McLaren","Mercedes","Red Bull","Williams"];
 
 $query = $pdo->query('SELECT * FROM users');
 $resultas = $query->fetchAll();
@@ -17,15 +17,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if(empty($_POST["name"])){
         $errors["name"] = "Veuillez saisir un prénom";
     }
-    if(empty($_POST["date_of_birth"])){
-        $errors["date_of_birth"] = "Veuillez saisir une date de naissance";
-    }
     if(empty($_POST["type"])){
         $errors["type"] = "Veuillez saisir un poste";
     }
 
-    if(strtotime($_POST["date_of_birth"]) == false){
-        $errors["date_of_birth"] = "Le format de la date est invalide !";
+    if(empty($_POST["minutes"])){
+        $errors["minutes"] = "Veuillez saisir une minutes";
+    }elseif (!is_numeric($_POST["minutes"])){
+        $errors["minutes"] = "Veuillez saisir un chiffre";
+    }
+
+    if(empty($_POST["seconde"])){
+        $errors["seconde"] = "Veuillez saisir une seconde";
+    }elseif (!is_numeric($_POST["seconde"])){
+        $errors["seconde"] = "Veuillez saisir un chiffre";
+    }elseif ($_POST["seconde"] > 60){
+        $errors["seconde"] = "Veuillez saisir un chiffre en dessous de la minutes";
+    }
+
+    if(empty($_POST["centiemes"])){
+        $errors["centiemes"] = "Veuillez saisir une centiemes";
+    }elseif (!is_numeric($_POST["centiemes"])){
+        $errors["centiemes"] = "Veuillez saisir un chiffre";
+    }elseif ($_POST["centiemes"] > 1000){
+        $errors["centiemes"] = "Veuillez saisir un chiffre en dessous de la seconde";
     }
 
     if ($_FILES["photos"]["error"] != 0) {
@@ -38,24 +53,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         $errors [] = "Pas bon";
     }
-    if (count($resultas) < 23 && count($errors) == 0 ) {
+    if (count($resultas) < 20 && count($errors) == 0 ) {
         if (!in_array($_POST["type"],$types)) {
             $errors ["result"] = "Hop Hop jeune fourbe";
         }else{
             $nameAssets = "assets/" . uniqid() . '-' . $_FILES["photos"]["name"];
             move_uploaded_file($_FILES["photos"]["tmp_name"], $nameAssets);
-            $qury = $pdo->prepare("INSERT INTO `f1`.`users` (`name`, `firstname`, `date_of_birth`, `poste`,`image`) VALUES (:name, :firstname, :date_of_birth, :poste, :image)");
+            $qury = $pdo->prepare("INSERT INTO `f1`.`users` (`name`, `firstname`,`minutes`,`seconde`,`centiemes`, `poste`,`image`) VALUES(:name, :firstname, :minutes, :seconde, :centiemes, :poste, :image)");
             $qury->execute([
                 "name" => $_POST['name'],
                 "firstname" => $_POST['lastname'],
-                "date_of_birth" => $_POST['date_of_birth'],
+                "minutes" => $_POST['minutes'],
+                "seconde" => $_POST['seconde'],
+                "centiemes" => $_POST['centiemes'],
                 "poste" => $_POST['type'],
                 "image" => $nameAssets,
             ]);
             redirectionIndex();
         }
     } else {
-        $errors ["result"] = "La limite de 23 joueur et atteinte";
+        $errors ["result"] = "La limite de 20 Pilotes et atteinte";
     }
 }
 
@@ -83,14 +100,14 @@ include "blocks/header.php";
     ?></h1>
 <section class="login-container">
     <div class="">
-        <h4 class="text-dark">Ajouter un Joueur</h4>
+        <h4 class="text-dark">Ajouter un Pilote</h4>
 
         <form action="" method="post" enctype="multipart/form-data">
-            <p>Nombre de joueur max : <br>
+            <p>Nombre de Pilote max : <br>
                 <?php
                 echo (count($resultas));
                 ?>
-                /23
+                /20
             </p>
             <!---------------------------------------------------------------------------->
             <div class="form-group">
@@ -110,14 +127,32 @@ include "blocks/header.php";
             </div>
             <!---------------------------------------------------------------------------->
             <div class="form-group">
-            <input class="form-control <?php displayBsClassForm($errors, 'date_of_birth');?>"
-                   type="date" name="date_of_birth" placeholder="Date de Naisance" required="required"
-                   value="<?php keepFormValue("date_of_birth");?>"/>
-                <?php displayBsErrorForm($errors, 'date_of_birth'); ?>
+                <label class="mb-2" for="">Minutes</label>
+            <input class="form-control <?php displayBsClassForm($errors, 'minutes');?>"
+                   type="number" name="minutes" placeholder="Minutes" required="required"
+                   value="<?php keepFormValue("minutes");?>"/>
+                <?php displayBsErrorForm($errors, 'minutes'); ?>
             </div>
             <!---------------------------------------------------------------------------->
             <div class="form-group">
-                <select name="type" class="form-select mb-3">
+                <label class="mb-2" for="">Seconde</label>
+                <input class="form-control <?php displayBsClassForm($errors, 'seconde');?>"
+                       type="number" name="seconde" placeholder="Seconde" required="required"
+                       value="<?php keepFormValue("seconde");?>"/>
+                <?php displayBsErrorForm($errors, 'seconde'); ?>
+            </div>
+            <!---------------------------------------------------------------------------->
+            <div class="form-group">
+                <label class="mb-2" for="">Centièmes</label>
+                <input class="form-control <?php displayBsClassForm($errors, 'centiemes');?>"
+                       type="number" name="centiemes" placeholder="Centièmes" required="required"
+                       value="<?php keepFormValue("centiemes");?>"/>
+                <?php displayBsErrorForm($errors, 'centiemes'); ?>
+            </div>
+            <!---------------------------------------------------------------------------->
+            <div class="form-group">
+                <label class="mb-2" for="">Ecurie</label>
+                <select name="type" class="form-select ">
                     <option></option>
                     <?php
                     foreach($types as $type){
@@ -131,14 +166,24 @@ include "blocks/header.php";
                 <?php displayBsErrorForm($errors, 'type'); ?>
             </div>
             <!---------------------------------------------------------------------------->
+            <label class="mb-2"" for="">photo</label>
             <input type="file" class="form-control mb-3" name="photos">
 
             <!---------------------------------------------------------------------------->
-            <button type="submit">Ajouter un Joueur</button>
+            <button type="submit">Ajouter un Pilote</button>
+            <?php
+            if (count($errors)>0){
+                echo ('<div>'.$errors["result"].'</div>');
+            }
+
+            ?>
+            <div>
+
+            </div>
         </form>
     </div>
-
 </section>
+
 
 <?php
 include "blocks/js.php";

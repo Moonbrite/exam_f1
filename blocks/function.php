@@ -42,11 +42,11 @@ function displayBsErrorForm($errors, $input){
     }
 }
 
-function keepFormValue($input, $result = null){
+function keepFormValue($input, $result = ""){
     if($_SERVER["REQUEST_METHOD"] == "POST"){
-        echo(htmlentities($_POST[$input]));
+        echo($_POST[$input]);
     } else {
-        if(!is_null($result)){
+        if(!empty($result)){
             echo(htmlentities($result[$input]));
         }
     }

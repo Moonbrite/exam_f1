@@ -15,7 +15,6 @@ if(array_key_exists("user",$_SESSION)) {
         $result = $query->fetch();
     }
 }
-
 $allwoedExtension =["image/jpeg","image/png"];
 if($_SERVER["REQUEST_METHOD"]=="POST") {
     if(empty($_POST["lastname"])){
@@ -24,16 +23,10 @@ if($_SERVER["REQUEST_METHOD"]=="POST") {
     if(empty($_POST["name"])){
         $errors["name"] = "Veuillez saisir un prénom";
     }
-    if(empty($_POST["date_of_birth"])){
-        $errors["date_of_birth"] = "Veuillez saisir une date de naissance";
-    }
     if(empty($_POST["type"])){
-        $errors["type"] = "Veuillez saisir un poste";
+        $errors["type"] = "Veuillez saisir un écurie";
     }
 
-    if(strtotime($_POST["date_of_birth"]) == false){
-        $errors["date_of_birth"] = "Le format de la date est invalide !";
-    }
     if ($_FILES["photos"]["error"] != 0 and $_FILES["photos"]["error"] != 4){
         $errors [] ="inconu";
     }
@@ -50,16 +43,18 @@ if($_SERVER["REQUEST_METHOD"]=="POST") {
     }
 
     if (count($errors)== 0) {
-        if ($_FILES["image"]["error"] != 4) {
+        if ($_FILES["photos"]["error"] != 4) {
             move_uploaded_file($_FILES["photos"]["tmp_name"],$result["image"]);
         }
-        $qury = $pdo->prepare("UPDATE `foot_2_ouf`.`users` SET name = :name , firstname = :firstname , date_of_birth = :date_of_birth , poste = :poste WHERE  id = :id;");
-        $qury ->execute([
-            "id"=>$_GET['modifier'],
-            "name"=>$_POST['name'],
-            "firstname"=>$_POST['lastname'],
-            "date_of_birth"=>$_POST['date_of_birth'],
-            "poste"=>$_POST['type'],
+        $qury = $pdo->prepare("UPDATE `f1`.`users` SET name = :name , firstname = :firstname ,minutes = :minutes ,seconde = :seconde,centiemes = :centiemes, poste = :poste WHERE  id = :id;");
+        $qury->execute([
+            "name" => $_POST['name'],
+            "firstname" => $_POST['lastname'],
+            "minutes" => $_POST['minutes'],
+            "seconde" => $_POST['seconde'],
+            "centiemes" => $_POST['centiemes'],
+            "poste" => $_POST['type'],
+            "id"=>$result["id"],
         ]);
         header('Location: index.php');
         exit();
@@ -83,12 +78,12 @@ if($_SERVER["REQUEST_METHOD"]=="POST") {
 include "blocks/header.php";
 ?>
 
-<h1>Bonjour <?php
+<h1 class="text-center">Bonjour <?php
     echo ($_SESSION["user"]);
     ?></h1>
 <section class="login-container">
     <div class="">
-        <h4 class="text-dark">Ajouter un Joueur</h4>
+        <h4 class="text-dark">Modifier un Pilote</h4>
 
         <form action="" method="post" enctype="multipart/form-data">
             <!---------------------------------------------------------------------------->
@@ -109,16 +104,34 @@ include "blocks/header.php";
             </div>
             <!---------------------------------------------------------------------------->
             <div class="form-group">
-                <input class="form-control <?php displayBsClassForm($errors, 'date_of_birth');?>"
-                       type="date" name="date_of_birth" placeholder="Date de Naisance" required="required"
-                       value="<?php keepFormValue("date_of_birth", $result);?>"/>
-                <?php displayBsErrorForm($errors, 'date_of_birth'); ?>
+                <label class="mb-2" for="">Minutes</label>
+                <input class="form-control <?php displayBsClassForm($errors, 'minutes');?>"
+                       type="number" name="minutes" placeholder="Minutes" required="required"
+                       value="<?php keepFormValue("minutes", $result);?>"/>
+                <?php displayBsErrorForm($errors, 'minutes'); ?>
             </div>
             <!---------------------------------------------------------------------------->
             <div class="form-group">
+                <label class="mb-2" for="">Seconde</label>
+                <input class="form-control <?php displayBsClassForm($errors, 'seconde');?>"
+                       type="number" name="seconde" placeholder="Seconde" required="required"
+                       value="<?php keepFormValue("seconde", $result);?>"/>
+                <?php displayBsErrorForm($errors, 'seconde'); ?>
+            </div>
+            <!---------------------------------------------------------------------------->
+            <div class="form-group">
+                <label class="mb-2" for="">Centièmes</label>
+                <input class="form-control <?php displayBsClassForm($errors, 'centiemes');?>"
+                       type="number" name="centiemes" placeholder="Centièmes" required="required"
+                       value="<?php keepFormValue("centiemes", $result);?>"/>
+                <?php displayBsErrorForm($errors, 'centiemes'); ?>
+            </div>
+            <!---------------------------------------------------------------------------->
+            <div class="form-group">
+                <label class="mb-2" for="">Ecurie</label>
                 <select  name="type" class="form-select mb-3">
                     <?php
-                    $types = ["Gardien","Attaquant","Milieu","Défenseur"];
+                    $types = ["Alfa Roméo","AlphaTauri","Alpine","Aston Martin","Ferrari","Haas","McLaren","Mercedes","Red Bull","Williams"];
                     foreach($types as $type){
                         $actif = '';
                         if($_SERVER["REQUEST_METHOD"]=='POST' && $_POST["type"] == $type || $result["poste"] == $type){
@@ -130,10 +143,18 @@ include "blocks/header.php";
                 <?php displayBsErrorForm($errors, 'type'); ?>
             </div>
             <!---------------------------------------------------------------------------->
+
+            <div>
+                <?php
+                echo ('<img class="img-previsu img-thumbnail mb-3" src="'.htmlspecialchars($result["image"]).'?id='.uniqid().'" alt="">');
+                ?>
+            </div>
+
+            <label class="mb-2" for="">Photo</label>
             <input type="file" class="form-control mb-3" name="photos">
 
             <!---------------------------------------------------------------------------->
-            <button type="submit">Ajouter un Joueur</button>
+            <button type="submit">Modifier le Pilote</button>
         </form>
     </div>
 

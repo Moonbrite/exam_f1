@@ -6,13 +6,8 @@ if (array_key_exists("postes",$_GET)) {
     $query = $pdo->prepare('SELECT * FROM users WHERE poste = :poste');
     $query->execute(["poste" => $_GET['postes']]);
     $resultas = $query->fetchAll();
-}elseif (array_key_exists("ages", $_GET)) {
-    $direction = ($_GET['ages'] == 'DESC') ? 'DESC' : 'ASC';
-    $query = $pdo->prepare('SELECT * FROM users ORDER BY date_of_birth ' . $direction);
-    $query->execute();
-    $resultas = $query->fetchAll();
 }else{
-    $query = $pdo->query('SELECT * FROM users ORDER BY poste');
+    $query = $pdo->query('SELECT * FROM users ORDER BY minutes,seconde,centiemes');
     $resultas = $query->fetchAll();
 }
 
@@ -75,22 +70,37 @@ include "blocks/header.php"
 <!---------------------------------------------------------------------------->
 
 <section class="">
-    <h1 class="text-center">Les meilleur pilote</h1>
-
+    <?php
+    if (!array_key_exists("postes",$_GET)) {
+        echo ('<h1 class="text-center mb-5">Les meilleur pilote</h1>');
+    }else{
+        echo ('<h1 class="text-center mb-5">Les pilote de '.($_GET["postes"]).'</h1>');
+    }
+    ?>
     <!---------------------------------------------------------------------------->
-    <div class="container row m-auto mb-5">
+    <div class="container row m-auto mb-5 flex-row-reverse">
         <?php
+        $placeSurlePodium = 0;
         foreach ($resultas as $resulta) {
-            $nomPernom = $resulta["name"] . " " . $resulta["firstname"];
-            echo('<div class="col-lg-3 mt-5"><div class="card">
-            <img src="' . htmlspecialchars($resulta["image"]) . '" class="card-img-top" alt="...">
-            <div class="card-body">
-            <h5 class="card-title">' . htmlspecialchars($nomPernom) . '</h5>
-            <p class="card-text">Date de Naissance : ' . htmlspecialchars($resulta["date_of_birth"]) . '</p>
+            $placeSurlePodium++;
+            $nomPernom = $resulta["firstname"] . " " . $resulta["name"];
+            $timer = $resulta["minutes"]. ":" .$resulta["seconde"]. ".".$resulta["centiemes"];
+            echo('<div class="col-lg-6 ');if(!array_key_exists("postes",$_GET)){ echo ('decalage');} echo('"><div class="card">
+            <div class="card-body text-center ');
+            if (array_key_exists("postes",$_GET)) { echo ($_GET["postes"]);}
+            echo ('">');
+            if (!array_key_exists("postes",$_GET)){
+                echo (' <h2>'.$placeSurlePodium.'</h2>');
+            }
+            if (array_key_exists("postes",$_GET)){
+                echo ('<img src="'.$resulta['image'].'?id='.uniqid().'" alt="">');
+            }
+            echo('<h5 class="card-title">' . htmlspecialchars($nomPernom) . '</h5>
+            <p class="card-text">Temps de la course : ' . htmlspecialchars($timer) . '</p>
             <p class="card-text ' . htmlspecialchars($resulta["poste"]) . ' ">Poste : ' . htmlspecialchars($resulta["poste"]) . '</p>');
             if (array_key_exists("user", $_SESSION)) {
                 echo('<a class="btn btn-danger" href="?suprimer=' . htmlspecialchars($resulta["id"]) . '">Suprimer le joueur</a>
-                        <a class="btn btn-success mt-2" href="edit.php?modifier=' . htmlspecialchars($resulta["id"]) . '">Modifier le joueur</a>');
+                        <a class="btn btn-success" href="edit.php?modifier=' . htmlspecialchars($resulta["id"]) . '">Modifier le joueur</a>');
             }
             echo('</div></div></div>');
         }
@@ -108,7 +118,9 @@ include "blocks/header.php"
     ?>
 </section>
 
-
+<?php
+include "blocks/arrow_scroll.php"
+?>
 <!---------------------------------------------------------------------------->
 <?php
 include "blocks/js.php"

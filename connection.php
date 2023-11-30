@@ -6,8 +6,8 @@ if(array_key_exists("user",$_SESSION)) {
 }
 $error =null;
 if($_SERVER["REQUEST_METHOD"]=="POST"){
-    if($_POST["user"] == "charlesleclerc" && $_POST ["password"] == "charlesleclerc") {
-        $_SESSION["user"] = "Charles Leclerc";
+    if($_POST["user"] == "canal+" && $_POST ["password"] == "<3CharlesLeclerc63") {
+        $_SESSION["user"] = "Canal-";
         header("Location: index.php");
     }else{
         $error = "Le user ou le mot de passe ne corsponde pas";

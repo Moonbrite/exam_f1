@@ -27,7 +27,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse justify-content-between" id="navbarNavDropdown">
-                <ul class="navbar-nav">
+                <ul class="navbar-nav align-items-center">
                     <div class="navbar-collapse" id="navbarNavDarkDropdown">
                         <ul class="navbar-nav">
                             <li class="nav-item dropdown">
@@ -50,49 +50,26 @@
                         </ul
                     </div>
                     <div class="navbar-collapse" id="navbarNavDarkDropdown">
-                        <ul class="navbar-nav">
+                        <ul class="navbar-nav align-items-center">
                             <li class="nav-item dropdown">
                                 <button class="btn btn-dark dropdown-toggle no-border ps-0" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Filtré par poste
+                                    Filtré par écurie
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-dark">
-                                    <li>
-                                        <a class="text-decoration-none d-flex flex-column dropdown-item" href="index.php?postes=Attaquant">Attaquant</a>
-                                    </li>
-                                    <li>
-                                        <a class="text-decoration-none d-flex flex-column dropdown-item" href="index.php?postes=Défenseur">Défenseur</a>
-                                    </li>
-                                    <li>
-                                        <a class="text-decoration-none d-flex flex-column dropdown-item" href="index.php?postes=Gardien">Gardien</a>
-                                    </li>
-                                    <li>
-                                        <a class="text-decoration-none d-flex flex-column dropdown-item" href="index.php?postes=Milieu">Milieu</a>
-                                    </li>
+                                    <?php
+                                    $types = ["Alfa Roméo","AlphaTauri","Alpine","Aston Martin","Ferrari","Haas","McLaren","Mercedes","Red Bull","Williams"];
+                                    foreach ($types as $type) {
+                                        echo ('<li>
+                                                <a class="text-decoration-none d-flex flex-column dropdown-item" href="index.php?postes='.$type.'">'.$type.'</a>
+                                            </li>');
+                                    }
+                                    ?>
                                     <li>
                                         <a class="text-decoration-none d-flex flex-column dropdown-item" href="index.php">Pas de Filtre</a>
                                     </li>
                                 </ul>
                             </li>
-                        </ul
-                    </div>
-                    <div class="navbar-collapse" id="navbarNavDarkDropdown">
-                        <ul class="navbar-nav">
-                            <li class="nav-item dropdown">
-                                <button class="btn btn-dark dropdown-toggle no-border ps-0" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Filtré par age
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-dark">
-                                    <li>
-                                        <a class="text-decoration-none d-flex flex-column dropdown-item" href="index.php?ages=DESC">DESC</a>
-                                    </li>
-                                    <li>
-                                        <a class="text-decoration-none d-flex flex-column dropdown-item" href="index.php?ages=ASC">ASC</a>
-                                    </li>
-                                    <li>
-                                        <a class="text-decoration-none d-flex flex-column dropdown-item" href="index.php">Pas de Filtre</a>
-                                    </li>
-                                </ul>
-                            </li>
+                            <li><a class="" href="podium.php">Podium</a></li>
                         </ul
                     </div>
                 </ul>
@@ -101,7 +78,7 @@
                         <?php
                         if(array_key_exists("user",$_SESSION)) {
                             echo ('<a class="nav-link btn-ajouter" href="admin.php">Ajouter un membre</a>
-                               <img src="assets/charles-leclerc-ferrari-1.jpg" alt="">');
+                               <img src="assets/julien_febreau.jfif" alt="">');
 
                         }else {
                             echo ('<svg width="46" height="46" fill="#fff" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

@@ -138,3 +138,117 @@ form button[type="submit"]:hover {
 .Milieu {
   color: darkgreen;
 }
+
+@media screen and (min-width: 1000px) {
+  .decalage:nth-child(even){
+    margin-top: 80px;
+  }
+}
+
+.decalage:nth-child(even){
+  margin: 80px 0;
+}
+
+.podium {
+  height: 90vh;
+  .podiumdeouf{
+    position: relative;
+  }
+}
+.image-podium{
+  width: 166px;
+}
+
+.p0{
+  position: absolute;
+  top: 132px;
+  left: 702px;
+  transition: all 2s ease-in;
+}
+
+.p1{
+  position: absolute;
+  top: 227px;
+  left: 455px;
+  transition: all 2s ease-in;
+}
+.p2{
+  position: absolute;
+  top: 237px;
+  right: 439px;
+  transition: all 2s ease-in;
+}
+
+.t0{
+  order: 2;
+}
+
+.t1{
+  order: 1;
+}
+
+.t2{
+  order: 3;
+}
+.font {
+  font-size: 2.4rem;
+}
+.marge {
+  margin-top: -150px;
+}
+
+.Alfa{
+  background-color: #b3b3b3;
+  border-radius: 5px;
+}
+
+.AlphaTauri{
+  background: #7b7990;
+  border-radius: 5px;
+}
+
+.Alpine{
+  background: #3296ba;
+  border-radius: 5px;
+}
+
+.Aston{
+  background: #41996b;
+  border-radius: 5px;
+}
+
+.Ferrari{
+  background: #ff1313;
+  border-radius: 5px;
+}
+
+.Haas{
+  background: #cd9b9b;
+  border-radius: 5px;
+}
+
+.McLaren{
+  background: #f0771d;
+  border-radius: 5px;
+}
+
+.Mercedes{
+  background: #5e5e5e;
+  border-radius: 5px;
+}
+
+.Bull {
+  background: #354164;
+  border-radius: 5px;
+}
+
+.Williams {
+  background: #55e5f5;
+  border-radius: 5px;
+}
+
+.flechejaune {
+  position: fixed;
+  right: 20px;
+  bottom: 10px;
+}
